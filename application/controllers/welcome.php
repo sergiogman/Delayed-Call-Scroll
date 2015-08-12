@@ -11,6 +11,12 @@ class Welcome extends CI_Controller {
 
     
 	public function index() {
+	   	$this->_data['datos'] = $this->system_model->getRanking();
+        
+        $this->parser->parse('welcome_message', $this->_data);
+	}
+    
+    public function more() {
 	   $last_msg_id = 0;
        $limit = 20;
        if($this->input->post('last_msg_id')){
@@ -20,7 +26,7 @@ class Welcome extends CI_Controller {
        
 		$this->_data['datos'] = $this->system_model->getRanking($last_msg_id, $limit);
         
-        $this->parser->parse('welcome_message', $this->_data);
+        $this->parser->parse('more_message', $this->_data);
 	}
 }
 

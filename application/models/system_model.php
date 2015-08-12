@@ -11,18 +11,17 @@ class System_model extends CI_Model{
 	 * @return array
 	 */
 	function getRanking($last_msg_id = 0, $limit = 20){
-	   $this->db->limit($limit);
-	   $this->db->select('*')->from('messages');
-       
-       if($last_msg_id != 0){
-        $this->db->where('mes_id <',$last_msg_id);
+	   if($last_msg_id != 0){
+	       $this->db->where('mes_id >',$last_msg_id);
        }
        
-       $this->db->order_by('mes_id','ASC');
+       $this->db->limit($limit);
+	   $this->db->select('*')->from('messages');
        
-       	$datos = $this->db->get();
-        
-        return $datos->result_array();
+       $this->db->order_by('mes_id','ASC');
+       $datos = $this->db->get();
+       
+       return $datos->result_array();
 	}
         
 }

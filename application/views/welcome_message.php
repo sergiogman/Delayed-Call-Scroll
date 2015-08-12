@@ -18,21 +18,26 @@
         {/datos}
 	</div>
     <div id="last_msg_loader"></div>
-	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
 </div>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     
-    function last_msg_funtion(){ 
+    function last_msg_funtion(){
         var ID=$(".message_box:last").attr("id");
-        $('div#body').html('<img src="{base_url}images/bigLoader.gif">');
-        $.post("{base_url}?action=get&last_msg_id="+ID, function(data){
-            if (data != ""){
-                $(".message_box:last").after(data);
+        $('div#last_msg_loader').html('<img src="{base_url}images/bigLoader.gif">');
+        
+        $.ajax({
+    		url: '{base_url}more',
+            type: 'POST',
+            data: 'last_msg_id='+ID,
+            success: function(data){
+                if (data != ""){
+                    $(".message_box:last").after(data);
+                }
+                $('div#last_msg_loader').empty();
             }
-            $('div#last_msg_loader').empty();
-        });
+    	});
     };  
 
     $(window).scroll(function(){
