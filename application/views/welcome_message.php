@@ -24,9 +24,9 @@
 $(document).ready(function(){
     
     function last_msg_funtion(){
-        var ID=$(".message_box:last").attr("id");
+        var ID = $(".message_box:last").attr("id");
         $('div#last_msg_loader').html('<img src="{base_url}images/bigLoader.gif">');
-        
+
         $.ajax({
     		url: '{base_url}more',
             type: 'POST',
@@ -41,9 +41,22 @@ $(document).ready(function(){
     };  
 
     $(window).scroll(function(){
-        if ($(window).scrollTop() == $(document).height() - $(window).height()){
-            last_msg_funtion();
+        if(typeof timeout == "number") {
+            window.clearTimeout(timeout);
+            delete timeout;
         }
+        timeout = window.setTimeout( function(){
+            if ($(window).scrollTop() == $(document).height() - $(window).height()){
+                var numItems = parseInt($('.message_box').length);
+                var totalRegistros = parseInt("{cantRanking}");
+                
+                if(totalRegistros > numItems){
+                    last_msg_funtion();
+                }else{
+                    $('div#last_msg_loader').html('<a href="#top"><img src="{base_url}images/flechaArriba.png"></a>');
+                }    
+            }
+        }, 100);
     });
 });
 </script>

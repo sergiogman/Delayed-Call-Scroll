@@ -23,6 +23,10 @@ class System_model extends CI_Model{
        
        return $datos->result_array();
 	}
+    
+    function cantRanking(){
+        return $this->db->count_all('messages');
+    }
         
 }
 ?>

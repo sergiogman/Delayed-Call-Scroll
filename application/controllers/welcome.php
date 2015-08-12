@@ -12,7 +12,7 @@ class Welcome extends CI_Controller {
     
 	public function index() {
 	   	$this->_data['datos'] = $this->system_model->getRanking();
-        
+        $this->_data['cantRanking'] = $this->system_model->cantRanking();
         $this->parser->parse('welcome_message', $this->_data);
 	}
     
