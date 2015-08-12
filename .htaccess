@@ -1,0 +1,16 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|images|robots\.txt|css|facebox|js|images|admin|favicon\.ico|crones|fonts|data|tsk)
+#RewriteRule ^(.*)$ /index.php/$1 [L]
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+php_value upload_max_filesize 10M 
+php_value post_max_size 10M 
+php_value max_execution_time 200 
+php_value max_input_time 200
+php_flag short_open_tag on
+
+SetEnv APP_ENV dev
+
+<IfModule mod_php5.c>
+   php_value short_open_tag 1
+ </IfModule>
