@@ -29,11 +29,11 @@ class System_model extends CI_Model{
     }
     
     
-    function getUsuarios($last_msg_id = 0, $limit = 20){
+    function getUsuarios($last_msg_id = 0, $limit = 5){
         if($last_msg_id > 0){
             $this->db->where('id_usuarios >',$last_msg_id);
         }
-        $this->db->order_by('fbuid','ASC');
+        $this->db->order_by('id_usuarios','ASC');
         $this->db->limit($limit);
         $db = $this->db->get('usuarios');
         return $db->result_array();
