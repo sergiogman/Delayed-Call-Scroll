@@ -11,7 +11,7 @@ class Welcome extends CI_Controller {
 
     
 	public function index() {
-	   	$this->_data['datos'] = $this->system_model->getRanking();
+	   	$this->_data['datos'] = $this->system_model->getUsuarios();
         $this->_data['cantRanking'] = $this->system_model->cantRanking();
         $this->parser->parse('welcome_message', $this->_data);
 	}
@@ -24,9 +24,32 @@ class Welcome extends CI_Controller {
         $limit = 5;
        }
        
-		$this->_data['datos'] = $this->system_model->getRanking($last_msg_id, $limit);
+		$this->_data['datos'] = $this->system_model->getUsuarios($last_msg_id, $limit);
         
         $this->parser->parse('more_message', $this->_data);
+	}
+    
+	public function horizontal() {
+	   	$this->_data['datos'] = $this->system_model->getRanking();
+        $this->_data['cantRanking'] = $this->system_model->cantRanking();
+        $this->parser->parse('horizontal_message', $this->_data);
+	}
+    
+    public function endless(){
+        $this->_data['datos'] = $this->system_model->getUsuarios();
+        $this->parser->parse('endless_view', $this->_data);
+    }
+    
+    public function endlessMore() {
+        $last_msg_id = 0;
+        $limit = 20;
+        if($this->input->post('last_msg_id')){
+            $last_msg_id = $this->input->post('last_msg_id');
+            $limit = 5;
+        }
+        
+        $this->_data['datos'] = $this->system_model->getUsuarios($last_msg_id, $limit);
+        $this->parser->parse('endless_more_view', $this->_data);
 	}
 }
 

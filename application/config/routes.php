@@ -41,7 +41,11 @@ $route['_ajax'] = "ajax_controller";
 $route['_ajax/(:any)/(:any)'] = "ajax_controller/$1/$2";
 $route['_ajax/(:any)'] = "ajax_controller/$1";
 
+$route['endless_more'] = "welcome/endlessMore";
+$route['endless'] = "welcome/endless";
+
 $route['more'] = "welcome/more";
+$route['horizontal'] = "welcome/horizontal";
 $route['index'] = "welcome";
 
 $route['default_controller'] = "welcome";
