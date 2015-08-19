@@ -1,5 +1,6 @@
 {datos}
-    <div id="{mes_id}" class="message_box">
-        <span class="number">{mes_id}</span> {msg} 
-    </div>
+<li value="{indice}">
+    <p>{nombre} {apellido}</p>
+    <img src="//graph.facebook.com/{fbuid}/picture?width=200" alt="{nombre}" />
+</li>
 {/datos}

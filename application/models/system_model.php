@@ -26,9 +26,13 @@ class System_model extends CI_Model{
     
     function cantRanking(){
         return $this->db->count_all('messages');
+    }    
+    
+    function getUsuarios(){
+        $db = $this->db->get('usuarios');
+        return $db->result_array();
     }
-    
-    
+    /*
     function getUsuarios($last_msg_id = 0, $limit = 5){
         if($last_msg_id > 0){
             $this->db->where('id_usuarios >',$last_msg_id);
@@ -37,6 +41,11 @@ class System_model extends CI_Model{
         $this->db->limit($limit);
         $db = $this->db->get('usuarios');
         return $db->result_array();
+    }
+    */
+    
+    function cantUsuarios(){
+        return $this->db->count_all('usuarios');
     }
     
         

@@ -50,3 +50,18 @@ padding-right:3px;
 font-weight:bold;
 }
 
+* {
+    margin: auto; 
+}
+
+body {
+    background: #cee; font-family: Helvetica, Arial, Verdana, 'Lucida Grande', sans-serif;
+}
+
+h1 {
+    text-align: center; margin:20px; 
+}
+    
+ul#images {
+    height: 450px; text-align: center; list-style: none; overflow-y: scroll;
+}

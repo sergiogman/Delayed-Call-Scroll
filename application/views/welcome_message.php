@@ -10,45 +10,66 @@
 <div id="container">
 	<h1>Welcome to Delayed Call!</h1>
 
-	<div id="body">
-        {datos}
-            <div id="{mes_id}" class="message_box">
-                <span class="number">{mes_id}</span> {msg} 
-            </div>
-        {/datos}
-	</div>
+
+    <div id="body">
+      <ul id="images"></ul>
+    </div>
     <div id="last_msg_loader"></div>
 </div>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
+var datos = $.parseJSON('{datos}');
+
+function init(buscar_desde){
+    if(buscar_desde==undefined){
+        buscar_desde = 0;
+    }else{
+        buscar_desde = parseInt(buscar_desde) + 1 ;
+    }
     
-    function last_msg_funtion(){
-        var ID = $(".message_box:last").attr("id");
-        $('div#last_msg_loader').html('<img src="{base_url}images/bigLoader.gif">');
-
-        $.ajax({
-    		url: '{base_url}more',
-            type: 'POST',
-            data: 'last_msg_id='+ID,
-            success: function(data){
-                if (data != ""){
-                    $(".message_box:last").after(data);
+    var cantidad_item_x_pagina = {cantidad_item_x_pagina};
+    var cantidad_total = {cantidad_total};
+    var string = "[";
+    for(i=buscar_desde;i<(parseInt(buscar_desde)+parseInt(cantidad_item_x_pagina));i++){
+        string = string + JSON.stringify(datos[i]) + ",";
+    }
+    string = string.substring(0, string.length-1) + "]";
+    
+    $.ajax({
+		url: '{base_url}more',type: 'POST',data: 'datos='+string,
+        success: function(data){
+            if (data != ""){
+                if(buscar_desde==0){
+                    $("ul#images").html(data);                        
+                }else{
+                    $("ul#images li:last").after(data);
                 }
-                $('div#last_msg_loader').empty();
             }
-    	});
-    };  
+            $('div#last_msg_loader').empty();
+        }
+	});
+}
 
-    $(window).scroll(function(){
+function last_msg_funtion(){
+    var ID = $("ul#images li:last").attr("value");
+    $('div#last_msg_loader').html('<img src="{base_url}images/bigLoader.gif">');
+    init(ID);
+    $('div#last_msg_loader').empty();
+};  
+    
+$(document).ready(function(){
+    init();
+
+    $('#images').scroll(function(){
         if(typeof timeout == "number") {
             window.clearTimeout(timeout);
             delete timeout;
         }
         timeout = window.setTimeout( function(){
-            if ($(window).scrollTop() == $(document).height() - $(window).height()){
-                var numItems = parseInt($('.message_box').length);
-                var totalRegistros = parseInt("{cantRanking}");
+            if ($('#images').scrollTop() == $('#images')[0].scrollHeight - $('#images')[0].clientHeight){
+                var numItems = parseInt($('ul#images li').length);
+                console.log(numItems);
+                var totalRegistros = parseInt("{cantidad_total}");
                 
                 if(totalRegistros > numItems){
                     last_msg_funtion();

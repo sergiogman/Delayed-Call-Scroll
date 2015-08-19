@@ -396,5 +396,15 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
+/*
+|--------------------------------------------------------------------------
+| Configuraciones de la pagina
+|--------------------------------------------------------------------------
+|
+| Todo parametro especifico para la aplicacion
+|
+*/
+$config['cantidad_item_x_pagina'] = 5;
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */
