@@ -9,42 +9,47 @@ class Welcome extends CI_Controller {
         $this->_data['base_url'] = $this->config->item('base_url');
     }
 
-    
+    /**
+     * Este método obtiene todos los registros y los prepara para la vista.
+     * Se debe generar un indice por cada registro para la obtensión consecutiva de registros durante el scroll.
+     * El procesamiento de la información por cada registro se debe hacer desde este controlador.
+     * 
+     * @return Se setean 3 variables para la vista:
+     * - datos: Es el json de los registros obtenidos y procesados.
+     * - cantidad_item_x_pagina: Es el valor definido en el config para parametrizar cantidad de registros a mostrar al primer llamado y por cada llamado a nuevos registros.
+     * - cantidad_total: Es el indice final que se obtiene al recorrer todos los registros procesados.
+     * 
+     * */
 	public function index() {
-	   	$this->_data['datos'] = $this->system_model->getUsuarios();
+	   	$datos = $this->system_model->getUsuarios();
+        
         $indice = 0;
-        foreach($this->_data['datos'] as $i=>$dato){
-            $this->_data['datos'][$i]['indice'] = $indice++;
-            $this->_data['datos'][$i]['nombre'] = str_replace(array('[','^','´','`','¨','~',']','\''),"",$dato['nombre']);
-            $this->_data['datos'][$i]['apellido'] = str_replace(array('[','^','´','`','¨','~',']','\''),"",$dato['apellido']);
+        foreach($datos as $i=>$dato){
+            $datos[$i]['indice'] = $indice++;
+            $datos[$i]['nombre'] = str_replace(array('[','^','´','`','¨','~',']','\''),"",$dato['nombre']);
+            $datos[$i]['apellido'] = str_replace(array('[','^','´','`','¨','~',']','\''),"",$dato['apellido']);
         }
         
-        $this->_data['datos'] = json_encode($this->_data['datos']);
-        
+        $this->_data['datos'] = json_encode($datos);
         $this->_data['cantidad_item_x_pagina'] = $this->config->item('cantidad_item_x_pagina');
         $this->_data['cantidad_total'] = $indice;
-        
-        
-        $this->data['ranking'] = $this->parser->parse("more_message", $this->_data, true);
-        
-        
+
         $this->parser->parse('welcome_message', $this->_data);
 	}
     
+    /**
+     * Este métdodo será invocado por llamado ajax para la visualización sobre el template definido.
+     * @param Se recibe por ajax post un set de datos en formato json.
+     * @return Se obtiene una vista con los registros procesados. 
+     * 
+     * */
     public function more() {
         $d = json_decode($this->input->post('datos'));
-        
-        d($d);
-        
         $this->_data['datos'] = array();
         foreach($d as $v){
             array_push($this->_data['datos'], (array)$v);    
         }
-        
-        
-        
         $this->parser->parse('more_message', $this->_data);
-        
 	}
     
 	public function horizontal() {
@@ -53,22 +58,6 @@ class Welcome extends CI_Controller {
         $this->parser->parse('horizontal_message', $this->_data);
 	}
     
-    public function endless(){
-        $this->_data['datos'] = $this->system_model->getUsuarios();
-        $this->parser->parse('endless_view', $this->_data);
-    }
-    
-    public function endlessMore() {
-        $last_msg_id = 0;
-        $limit = 20;
-        if($this->input->post('last_msg_id')){
-            $last_msg_id = $this->input->post('last_msg_id');
-            $limit = 5;
-        }
-        
-        $this->_data['datos'] = $this->system_model->getUsuarios($last_msg_id, $limit);
-        $this->parser->parse('endless_more_view', $this->_data);
-	}
 }
 
 /* End of file welcome.php */
