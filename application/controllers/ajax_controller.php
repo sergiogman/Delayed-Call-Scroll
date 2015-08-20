@@ -45,17 +45,6 @@ class Ajax_controller extends CI_Controller {
 
         echo json_encode($response);
     }
-
-    function getRanking(){
-        if(isset($_POST['offset'])){        
-            $offset = $_POST['offset'];
-            $datos = $this->system_model->getRanking($offset);
-            echo json_encode($datos);
-        }else{
-            $array = array();
-            echo json_encode($array);
-        }
-    }
 }
 
 // END OF FILE

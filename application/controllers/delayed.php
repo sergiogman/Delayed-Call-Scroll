@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Delayed extends CI_Controller {
     protected $_data;
     
     public function __construct() {
@@ -13,6 +13,8 @@ class Welcome extends CI_Controller {
      * Este método obtiene todos los registros y los prepara para la vista.
      * Se debe generar un indice por cada registro para la obtensión consecutiva de registros durante el scroll.
      * El procesamiento de la información por cada registro se debe hacer desde este controlador.
+     * 
+     * @param uri->segment(1) /vertical o /horizontal
      * 
      * @return Se setean 3 variables para la vista:
      * - datos: Es el json de los registros obtenidos y procesados.
@@ -34,7 +36,13 @@ class Welcome extends CI_Controller {
         $this->_data['cantidad_item_x_pagina'] = $this->config->item('cantidad_item_x_pagina');
         $this->_data['cantidad_total'] = $indice;
 
-        $this->parser->parse('welcome_message', $this->_data);
+        if($this->uri->segment(1) == "vertical"){
+            $this->parser->parse('vertical_message', $this->_data);
+        }elseif($this->uri->segment(1) == "horizontal"){
+            $this->parser->parse('horizontal_message', $this->_data);
+        }else{
+            show_error("URL <a href=\"{$this->_data['base_url']}vertical\">/vertical</a> o <a href=\"{$this->_data['base_url']}horizontal\">/horizontal</a>");
+        }
 	}
     
     /**
@@ -44,21 +52,33 @@ class Welcome extends CI_Controller {
      * 
      * */
     public function more() {
-        $d = json_decode($this->input->post('datos'));
-        $this->_data['datos'] = array();
-        foreach($d as $v){
-            array_push($this->_data['datos'], (array)$v);    
+        if($this->input->post()){
+            $d = json_decode($this->input->post('datos'));
+            $this->_data['datos'] = array();
+            foreach($d as $v){
+                array_push($this->_data['datos'], (array)$v);    
+            }
+            $this->parser->parse('more_message', $this->_data);
+        }else{
+            show_error("URL <a href=\"{$this->_data['base_url']}vertical\">/vertical</a> o <a href=\"{$this->_data['base_url']}horizontal\">/horizontal</a>");
         }
-        $this->parser->parse('more_message', $this->_data);
 	}
     
-	public function horizontal() {
-	   	$this->_data['datos'] = $this->system_model->getRanking();
-        $this->_data['cantRanking'] = $this->system_model->cantRanking();
-        $this->parser->parse('horizontal_message', $this->_data);
+    /**
+     * Este métdodo será invocado por llamado ajax para la visualización sobre una modal.
+     * @param Se recibe por ajax post un valor indice, ejemplo el fbuid.
+     * @return Se obtiene una vista con los registros procesados. 
+     * 
+     * */
+    public function modal() {
+        if($this->input->post()){
+            $d = $this->input->post('fbuid');
+            /**
+             * Esta línea busca los datos según el valor recibido.
+             */
+            $this->_data['datos'] = $this->system_model->getUsuariosByFbuid($d);
+            $this->parser->parse('modal_message', $this->_data);
+        }
 	}
     
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */

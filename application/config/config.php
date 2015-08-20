@@ -404,7 +404,7 @@ $config['proxy_ips'] = '';
 | Todo parametro especifico para la aplicacion
 |
 */
-$config['cantidad_item_x_pagina'] = 5;
+$config['cantidad_item_x_pagina'] = 4;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
