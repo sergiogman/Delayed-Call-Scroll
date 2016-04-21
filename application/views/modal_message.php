@@ -9,6 +9,7 @@
       </div>
       <div class="modal-body">
         <p>Esta es la modal</p>
+        <p><img src="//graph.facebook.com/{fbuid}/picture?width=200" alt="{nombre}" /></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
